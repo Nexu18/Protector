@@ -31,10 +31,6 @@ public class Area {
 	 * 2 vector(x, z)
 	 */
 	
-	public static String test(){
-		return "test";
-	}
-	
 	private Block srcBlock;
 	//private Player owner;
 	private Set<String> owners;
