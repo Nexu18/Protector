@@ -1,0 +1,6 @@
+name: Protector
+main: main.Protector
+version: 0.0.1
+commands:
+    protect:
+        description: abvc
