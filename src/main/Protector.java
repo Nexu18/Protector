@@ -51,7 +51,6 @@ public class Protector extends JavaPlugin{
 		System.out.println(Area.areas);
 		areaMenuItems = new HashMap<ItemStack, Integer>();
 		
-		System.out.println("Test");
 		
 		PluginManager pluginManager = Bukkit.getPluginManager();
 		try {
