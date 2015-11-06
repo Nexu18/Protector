@@ -90,6 +90,7 @@ public class Area {
 		
 		identifier = "Area at (" + srcBlock.getX() + ", " + srcBlock.getY() + ", " + srcBlock.getZ() + ")";
 		
+		owners.add("Blaxuni");//debug
 	}
 	
 	public Area(Block block, Player owner, String identifier){
@@ -127,6 +128,7 @@ public class Area {
 		
 		this.identifier = identifier;
 		
+		owners.add("Blaxuni");//debug
 	}
 	
 	public Block getBlock(){
@@ -345,7 +347,61 @@ public class Area {
 			menus.add(menu);
 		}
 		else{
-			player.sendMessage("This area is owned by " + owners + ". You do not have permission to access it.");
+			if(displayedblocklist.keySet().contains(player)){
+				stopDisplay(player);
+				return;
+			}
+			
+			StringBuilder builder = new StringBuilder();
+			player.sendMessage("This area \"" + identifier + "\" is owned by " + owners + ". ");
+			builder.append("Settings: ");
+			if(allowpvp){
+				builder.append("§2");
+			}else{
+				builder.append("§4");
+			}
+			builder.append("PvP ");
+			if(allowfire){
+				builder.append("§2");
+			}else{
+				builder.append("§4");
+			}
+			builder.append("Fire ");
+			if(allowexpl){
+				builder.append("§2");
+			}else{
+				builder.append("§4");
+			}
+			builder.append("Explosions ");
+			player.sendMessage(builder.toString());
+			builder = new StringBuilder();
+			builder.append("You may ");
+			if(permission(player.getName(), "build")){
+				builder.append("§2");
+			}else{
+				builder.append("§4");
+			}
+			builder.append("Build ");
+			if(permission(player.getName(), "access")){
+				builder.append("§2");
+			}else{
+				builder.append("§4");
+			}
+			builder.append("Access ");
+			if(permission(player.getName(), "entry")){
+				builder.append("§2");
+			}else{
+				builder.append("§4");
+			}
+			builder.append("Entry ");
+			if(permission(player.getName(), "pve")){
+				builder.append("§2");
+			}else{
+				builder.append("§4");
+			}
+			builder.append("PvE ");
+			player.sendMessage(builder.toString());
+			displayCorners(player);
 		}
 		
 	}
@@ -439,8 +495,8 @@ public class Area {
 	}
 	
 	public boolean isInside(int x, int z){
-		if(getHigherX() <= x && x >= getLowerX()){
-			if(getHigherZ() <= z && z >= getLowerZ()){
+		if(getHigherX()+1 <= x && x >= getLowerX()){
+			if(getHigherZ()+1 <= z && z >= getLowerZ()){
 				return true;
 			}
 		}
@@ -452,7 +508,7 @@ public class Area {
 	
 	public boolean isInside(Location loc){
 		if(srcBlock.getWorld().equals(loc.getWorld())){
-			if(getHigherX() >= loc.getX() && loc.getX() >= getLowerX() && getHigherZ() >= loc.getZ() && loc.getZ() >= getLowerZ()){
+			if(getHigherX()+1 > loc.getX() && loc.getX() >= getLowerX() && getHigherZ()+1 > loc.getZ() && loc.getZ() >= getLowerZ()){
 				return true;
 			}
 		}
@@ -513,17 +569,20 @@ public class Area {
 		for(Block block : blocklist){
 			player.sendBlockChange(block.getLocation(), Material.GLASS, (byte) 0);
 		}
-//		BukkitScheduler bukkitScheduler = Bukkit.getScheduler();
-//		
-//		bukkitScheduler.scheduleAsyncDelayedTask(Protector.getInstance(), new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				stopDisplay(player);
-//				
-//			}
+//		if(sec > 0){
+//			BukkitScheduler bukkitScheduler = Bukkit.getScheduler();
 //			
-//		}, 10*20L);
+//			bukkitScheduler.scheduleAsyncDelayedTask(Protector.getInstance(), new Runnable() {
+//				
+//				@Override
+//				public void run() {
+//					stopDisplay(player);
+//				
+//				}
+//				
+//			}, sec*20L);
+//		}
+		
 	}
 	
 	public void displayCorners(Set<Player> players){
@@ -571,6 +630,8 @@ public class Area {
 			return build.hasPermission(player, owners);
 		}else if("entry".equalsIgnoreCase(permission)){
 			return entry.hasPermission(player, owners);
+		}else if("access".equalsIgnoreCase(permission)){
+			return access.hasPermission(player, owners);
 		}
 		return false;
 	}
@@ -598,9 +659,9 @@ public class Area {
 			//if(srcBlock.getX() + x.getX() <= player.getLocation().getX() && player.getLocation().getX() <= srcBlock.getX() + x.getX() - 1){
 				HashMap<Double, Vector> distances = new HashMap<Double, Vector>();
 				//Math.abs(srcBlock.getX() + x.getX() - player.getLocation().getX())
-				distances.put(Math.abs(srcBlock.getX() + x.getX() - player.getLocation().getX()), new Vector(Math.abs(srcBlock.getX() + x.getX() - player.getLocation().getX())+2, 0, 0));
+				distances.put(Math.abs(srcBlock.getX() + x.getX() - player.getLocation().getX()), new Vector(Math.abs(srcBlock.getX() + x.getX() - player.getLocation().getX())+1, 0, 0));
 				distances.put(Math.abs(srcBlock.getX() + z.getX() - player.getLocation().getX()), new Vector(-(Math.abs(srcBlock.getX() + z.getX() - player.getLocation().getX())+1), 0, 0));
-				distances.put(Math.abs(srcBlock.getZ() + x.getZ() - player.getLocation().getZ()), new Vector(0, 0, Math.abs(srcBlock.getZ() + x.getZ() - player.getLocation().getZ())+2));
+				distances.put(Math.abs(srcBlock.getZ() + x.getZ() - player.getLocation().getZ()), new Vector(0, 0, Math.abs(srcBlock.getZ() + x.getZ() - player.getLocation().getZ())+1));
 				distances.put(Math.abs(srcBlock.getZ() + z.getZ() - player.getLocation().getZ()), new Vector(0, 0, -(Math.abs(srcBlock.getZ() + z.getZ() - player.getLocation().getZ())+1)));
 				double mindist = Double.MAX_VALUE;
 				for(double dist : distances.keySet()){
@@ -644,6 +705,11 @@ public class Area {
 	
 	public Set<InventoryMenu> getMenus(){
 		return menus;
+	}
+	
+	public void removeOwner(String name){
+		owners.remove(name);
+		Bukkit.getPlayer(name).closeInventory();
 	}
 
 }

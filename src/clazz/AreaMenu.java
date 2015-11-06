@@ -71,8 +71,7 @@ public class AreaMenu extends InventoryMenu{
 		}
 		
 		else if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Abandon Area")) {
-			Area.areas.remove(getArea());
-			player.closeInventory();
+			getArea().removeOwner(player.getName());
 		} else if (itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Display Area")) {
 			getArea().displayCorners(player);
 		}

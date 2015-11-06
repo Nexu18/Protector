@@ -69,6 +69,18 @@ public class CommandProtect implements CommandExecutor {
 //					
 //				}
 				
+			}else if(args.length == 1){
+				Block block = player.getTargetBlock((Set<Material>)null, 20);
+				if(block.getType().equals(Material.GOLD_BLOCK)){
+					Area area = new Area(block,player, args[0]);
+					if(area.getBlock() != null){
+						Area.areas.add(area);
+						player.sendMessage("Protection created successfully at (" + block.getX() + "," + block.getZ() + ").");
+						return true;
+					}
+					player.sendMessage("Could not create Protection.");
+					
+				}
 			}
 				
 		} else{
