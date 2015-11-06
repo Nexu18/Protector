@@ -3,6 +3,7 @@ package clazz;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,8 +74,6 @@ public class Area {
 		this.owners = new HashSet<String>();
 		this.owners.add(owner.getName());
 		
-		owners.add("Blaxuni");
-		
 		menus = new HashSet<InventoryMenu>();
 		x = newx;
 		z = newz;
@@ -113,7 +112,6 @@ public class Area {
 		this.owners = new HashSet<String>();
 		this.owners.add(owner.getName());
 		
-		owners.add("Blaxuni");
 		
 		menus = new HashSet<InventoryMenu>();
 		x = newx;
@@ -368,6 +366,8 @@ public class Area {
 			new ListMenu(player, build, identifier);
 		}else if("entry".equalsIgnoreCase(permission)){
 			new ListMenu(player, entry, identifier);
+		}else if("access".equalsIgnoreCase(permission)){
+			new ListMenu(player, access, identifier);
 		}
 	}
 	
@@ -547,8 +547,9 @@ public class Area {
 	
 	public Set<Player> stopDisplay(){
 		Set<Player> players = ((HashMap<Player, ArrayList<Block>>) displayedblocklist.clone()).keySet();
-		for(Player player : displayedblocklist.keySet()){
-			stopDisplay(player);
+		Iterator<Player> iter = displayedblocklist.keySet().iterator();
+		while(iter.hasNext()){
+			stopDisplay(iter.next());
 		}
 		return players;
 	}
@@ -569,15 +570,14 @@ public class Area {
 		}else if("build".equalsIgnoreCase(permission)){
 			return build.hasPermission(player, owners);
 		}else if("entry".equalsIgnoreCase(permission)){
-			return false;//debug
-			//return entry.hasPermission(player, owners);
+			return entry.hasPermission(player, owners);
 		}
 		return false;
 	}
 	
 	public boolean permission(String player, Block block){
 		for(Block block2 : blockaccess.keySet()){
-			if(block2 == block){
+			if(block2.equals(block)){
 				return blockaccess.get(block2).hasPermission(player, owners);
 			}
 		}
@@ -597,19 +597,20 @@ public class Area {
 		if(isInside(player.getLocation())){
 			//if(srcBlock.getX() + x.getX() <= player.getLocation().getX() && player.getLocation().getX() <= srcBlock.getX() + x.getX() - 1){
 				HashMap<Double, Vector> distances = new HashMap<Double, Vector>();
-				distances.put(Math.abs(player.getLocation().getX() - srcBlock.getX() + x.getX()), new Vector(player.getLocation().getX() - srcBlock.getX() + x.getX()+1, 0, 0));
-				distances.put(Math.abs(srcBlock.getX() + z.getX() - player.getLocation().getX()), new Vector(-(srcBlock.getX() + z.getX() - player.getLocation().getX()+1), 0, 0));
-				distances.put(Math.abs(player.getLocation().getZ() - srcBlock.getZ() + x.getZ()), new Vector(0, 0, player.getLocation().getZ() - srcBlock.getZ() + x.getZ()+1));
-				distances.put(Math.abs(srcBlock.getZ() + z.getZ() - player.getLocation().getZ()), new Vector(0, 0, -(srcBlock.getZ() + z.getZ() - player.getLocation().getZ()+1)));
+				//Math.abs(srcBlock.getX() + x.getX() - player.getLocation().getX())
+				distances.put(Math.abs(srcBlock.getX() + x.getX() - player.getLocation().getX()), new Vector(Math.abs(srcBlock.getX() + x.getX() - player.getLocation().getX())+2, 0, 0));
+				distances.put(Math.abs(srcBlock.getX() + z.getX() - player.getLocation().getX()), new Vector(-(Math.abs(srcBlock.getX() + z.getX() - player.getLocation().getX())+1), 0, 0));
+				distances.put(Math.abs(srcBlock.getZ() + x.getZ() - player.getLocation().getZ()), new Vector(0, 0, Math.abs(srcBlock.getZ() + x.getZ() - player.getLocation().getZ())+2));
+				distances.put(Math.abs(srcBlock.getZ() + z.getZ() - player.getLocation().getZ()), new Vector(0, 0, -(Math.abs(srcBlock.getZ() + z.getZ() - player.getLocation().getZ())+1)));
 				double mindist = Double.MAX_VALUE;
 				for(double dist : distances.keySet()){
 					if(dist < mindist)
 						mindist = dist;
 				}
-				System.out.println("dist " + mindist);
-				System.out.println(distances);
-				if(mindist != Double.MAX_VALUE)
+				if(mindist != Double.MAX_VALUE){
 					player.teleport(player.getLocation().add(distances.get(mindist)));
+				}
+					
 			//}
 		}
 //		ArrayList<Block> blocklist = new ArrayList<Block>();

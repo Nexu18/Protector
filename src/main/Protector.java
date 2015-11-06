@@ -32,7 +32,7 @@ public class Protector extends JavaPlugin{
 			Material.DROPPER, Material.ANVIL, Material.ENCHANTMENT_TABLE, Material.JUKEBOX, Material.NOTE_BLOCK, Material.DARK_OAK_DOOR, Material.IRON_DOOR_BLOCK, 
 			Material.SPRUCE_DOOR, Material.JUNGLE_DOOR, Material.WOODEN_DOOR, Material.TRAP_DOOR, Material.IRON_TRAPDOOR, Material.TRAPPED_CHEST, Material.DISPENSER, 
 			Material.HOPPER, Material.FENCE_GATE, Material.FENCE, Material.ACACIA_FENCE, Material.BIRCH_FENCE, Material.DARK_OAK_FENCE,
-			Material.IRON_FENCE, Material.JUNGLE_FENCE, Material.NETHER_FENCE, Material.SPRUCE_FENCE};
+			Material.IRON_FENCE, Material.JUNGLE_FENCE, Material.NETHER_FENCE, Material.SPRUCE_FENCE, Material.LEASH};
 	
 	public static boolean accessible(Material material){
 		for(int i = 0; i < ACCESS.length; i++){
@@ -65,36 +65,6 @@ public class Protector extends JavaPlugin{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		//
-//		areaMenuItems.put(ItemHandler.createItem(Material.WOOL, "§6Enlarge North", 1, 13, "§5Makes the Area bigger by one block."), 1);
-//		areaMenuItems.put(ItemHandler.createItem(Material.COMPASS, "§6North", 1), 10);
-//		areaMenuItems.put(ItemHandler.createItem(Material.WOOL, "§6Decrease North", 1, 14, "§5Makes the Area smaller by one block."), 19);
-//		
-//		areaMenuItems.put(ItemHandler.createItem(Material.WOOL, "§6Enlarge South", 1, 13, "§5Makes the Area bigger by one block."), 2);
-//		areaMenuItems.put(ItemHandler.createItem(Material.COMPASS, "§6South", 1), 11);
-//		areaMenuItems.put(ItemHandler.createItem(Material.WOOL, "§6Decrease South", 1, 14, "§5Makes the Area smaller by one block."), 20);
-//		
-//		areaMenuItems.put(ItemHandler.createItem(Material.WOOL, "§6Enlarge East", 1, 13, "§5Makes the Area bigger by one block."), 3);
-//		areaMenuItems.put(ItemHandler.createItem(Material.COMPASS, "§6East", 1), 12);
-//		areaMenuItems.put(ItemHandler.createItem(Material.WOOL, "§6Decrease East", 1, 14, "§5Makes the Area smaller by one block."), 21);
-//		
-//		areaMenuItems.put(ItemHandler.createItem(Material.WOOL, "§6Enlarge West", 1, 13, "§5Makes the Area bigger by one block."), 4);
-//		areaMenuItems.put(ItemHandler.createItem(Material.COMPASS, "§6West", 1), 13);
-//		areaMenuItems.put(ItemHandler.createItem(Material.WOOL, "§6Decrease West", 1, 14, "§5Makes the Area smaller by one block."), 22);
-//		
-//		areaMenuItems.put(ItemHandler.createItem(Material.GLASS, "§6Display Area", 1, "§5Shows you the bounds of this area."), 9);
-//		areaMenuItems.put(ItemHandler.createItem(Material.BRICK, "§6Allow Building", 1, ""), 5);
-//		areaMenuItems.put(ItemHandler.createItem(Material.GOLD_INGOT, "§6Allow Access", 1, ""), 6);
-//		areaMenuItems.put(ItemHandler.createItem(Material.FENCE_GATE, "§6Allow Entry", 1, ""), 7);
-//		areaMenuItems.put(ItemHandler.createItem(Material.CHAINMAIL_HELMET, "§6Allow PvP", 1, "", "§5Toggle PvP in your area."), 24);
-//		areaMenuItems.put(ItemHandler.createItem(Material.MOB_SPAWNER, "§6Allow PvE", 1, "", "§5Allow or restrict PvE in your area."), 8);
-//		areaMenuItems.put(ItemHandler.createItem(Material.STONE, "§6Edit Blocks", 1, "§5Edit block-specific access rules."), 26);
-//		areaMenuItems.put(ItemHandler.createItem(Material.PAPER, "§6Edit Build List", 1, "§5Edit listed people for building."), 14);
-//		areaMenuItems.put(ItemHandler.createItem(Material.PAPER, "§6Edit Access List", 1, "§5Edit listed people for access."), 15);
-//		areaMenuItems.put(ItemHandler.createItem(Material.PAPER, "§6Edit Entry List", 1, "§5Edit listed people for entry."), 16);
-//		areaMenuItems.put(ItemHandler.createItem(Material.PAPER, "§6Edit PvE List", 1, "§5Edit listed people for PvE."), 17);
-//		areaMenuItems.put(ItemHandler.createItem( Material.BEDROCK, "§4Abandon Area", 1, "§5Deletes this Area. All territory will be lost!"), 18);
 		
 		
 	}
