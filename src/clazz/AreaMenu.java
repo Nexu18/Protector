@@ -45,6 +45,10 @@ public class AreaMenu extends InventoryMenu{
 			getArea().togglePermission("pve");
 		}else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Allow PvP")) {
 			getArea().togglePermission("pvp");
+		}else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Allow Fire")) {
+			getArea().togglePermission("fire");
+		}else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Allow Explosions")) {
+			getArea().togglePermission("expl");
 		}
 		
 		else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Edit Build List")) {
@@ -154,8 +158,10 @@ public class AreaMenu extends InventoryMenu{
 		items.put(5, ItemHandler.createItem(Material.BRICK, "§6Allow Building", 1, ""));
 		items.put(6, ItemHandler.createItem(Material.GOLD_INGOT, "§6Allow Access", 1, ""));
 		items.put(7, ItemHandler.createItem(Material.FENCE_GATE, "§6Allow Entry", 1, ""));
-		items.put(24, ItemHandler.createItem(Material.CHAINMAIL_HELMET, "§6Allow PvP", 1, "", "§5Toggle PvP in your area."));
-		items.put(8, ItemHandler.createItem(Material.MOB_SPAWNER, "§6Allow PvE", 1, "", "§5Allow or restrict PvE in your area."));
+		items.put(23, ItemHandler.createItem(Material.CHAINMAIL_HELMET, "§6Allow PvP", 1, "", "§5Allow or restrict PvP."));
+		items.put(24, ItemHandler.createItem(Material.FLINT_AND_STEEL, "§6Allow Fire", 1, "", "§5Enable or disable fire spread"));
+		items.put(25, ItemHandler.createItem(Material.TNT, "§6Allow Explosions", 1, "", "§5Enable or disable explosion block damage."));
+		items.put(8, ItemHandler.createItem(Material.MOB_SPAWNER, "§6Allow PvE", 1, "", "§5Allow or restrict PvE."));
 		items.put(26, ItemHandler.createItem(Material.STONE, "§6Edit Blocks", 1, "§5Edit block-specific access rules."));
 		
 		items.put(14, ItemHandler.createListItem("§6Edit Build List", area.build.set, Material.PAPER));
@@ -175,6 +181,10 @@ public class AreaMenu extends InventoryMenu{
 				items.put(i, ItemHandler.editDescription(items.get(i), "§f" + area.pve, 0));
 			}else if(items.get(i).getItemMeta().getDisplayName().contains("Allow PvP")){
 				items.put(i, ItemHandler.editDescription(items.get(i), "§f" + area.permissionBoolToString(area.allowpvp), 0));
+			}else if(items.get(i).getItemMeta().getDisplayName().contains("Allow Fire")){
+				items.put(i, ItemHandler.editDescription(items.get(i), "§f" + area.permissionBoolToString(area.allowfire), 0));
+			}else if(items.get(i).getItemMeta().getDisplayName().contains("Allow Explosions")){
+				items.put(i, ItemHandler.editDescription(items.get(i), "§f" + area.permissionBoolToString(area.allowexpl), 0));
 			}
 			
 		}

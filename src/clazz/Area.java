@@ -39,6 +39,8 @@ public class Area {
 	String identifier;
 	
 	boolean allowpvp;
+	boolean allowfire;
+	boolean allowexpl;
 	Permission pve;
 	Permission build;
 	Permission access;
@@ -84,6 +86,8 @@ public class Area {
 		blockaccess = new HashMap<Block, Permission>();
 		blocksforaccess = new ArrayList<Block>();
 		playersInListMenu = new HashMap<String, Character>();
+		allowfire = false;
+		allowexpl= false;
 		
 		identifier = "Area at (" + srcBlock.getX() + ", " + srcBlock.getY() + ", " + srcBlock.getZ() + ")";
 		
@@ -177,9 +181,20 @@ public class Area {
 	 */
 	public void togglePermission(String str){
 		if("pvp".equalsIgnoreCase(str)){
-			if(allowpvp)
-				allowpvp = true;
-			allowpvp = false;
+			if(!allowpvp)
+					allowpvp = true;
+			else
+				allowpvp = false;
+		}else if("fire".equalsIgnoreCase(str)){
+			if(!allowfire)
+				allowfire = true;
+			else
+				allowfire = false;
+		}else if("expl".equalsIgnoreCase(str)){
+			if(!allowexpl)
+				allowexpl = true;
+			else
+				allowexpl = false;
 		}else if("pve".equalsIgnoreCase(str)){
 			pve.toggle();
 		}else if("build".equalsIgnoreCase(str)){
@@ -531,11 +546,15 @@ public class Area {
 	
 	/**
 	 * DO NOT USE THIS FOR ACCESS PERMISSION
+	 * Param player can be null when asking "pvp", "fire or "expl" permission
 	 */
 	public boolean permission(String player, String permission){
 		if("pvp".equalsIgnoreCase(permission)){
-			if(allowpvp)
-				return true;
+				return allowpvp;
+		}else if("fire".equalsIgnoreCase(permission)){
+			return allowfire;
+		}else if("expl".equalsIgnoreCase(permission)){
+			return allowexpl;
 		}else if("pve".equalsIgnoreCase(permission)){
 			return pve.hasPermission(player, owners);
 		}else if("build".equalsIgnoreCase(permission)){
