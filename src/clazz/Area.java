@@ -459,6 +459,15 @@ public class Area {
 		return false;
 	}
 	
+	public boolean isNear(Location loc){
+		if(srcBlock.getWorld().equals(loc.getWorld())){
+			if(getHigherX()+2 >= loc.getX() && loc.getX() >= getLowerX()-2 && getHigherZ()+2 >= loc.getZ() && loc.getZ() >= getLowerZ()-2){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean isOwner(String player){
 		for(String owner : owners){
 			if(owner.equals(player)){
@@ -560,7 +569,8 @@ public class Area {
 		}else if("build".equalsIgnoreCase(permission)){
 			return build.hasPermission(player, owners);
 		}else if("entry".equalsIgnoreCase(permission)){
-			return entry.hasPermission(player, owners);
+			return false;//debug
+			//return entry.hasPermission(player, owners);
 		}
 		return false;
 	}
@@ -585,9 +595,22 @@ public class Area {
 	
 	public void lockOut(Player player){
 		if(isInside(player.getLocation())){
-			if(srcBlock.getX() + x.getX() <= player.getLocation().getX() && player.getLocation().getX() <= srcBlock.getX() + x.getX() - 1){
-				player.teleport(player.getLocation().add(new Vector(1, 0, 0)));
-			}
+			//if(srcBlock.getX() + x.getX() <= player.getLocation().getX() && player.getLocation().getX() <= srcBlock.getX() + x.getX() - 1){
+				HashMap<Double, Vector> distances = new HashMap<Double, Vector>();
+				distances.put(Math.abs(player.getLocation().getX() - srcBlock.getX() + x.getX()), new Vector(player.getLocation().getX() - srcBlock.getX() + x.getX()+1, 0, 0));
+				distances.put(Math.abs(srcBlock.getX() + z.getX() - player.getLocation().getX()), new Vector(-(srcBlock.getX() + z.getX() - player.getLocation().getX()+1), 0, 0));
+				distances.put(Math.abs(player.getLocation().getZ() - srcBlock.getZ() + x.getZ()), new Vector(0, 0, player.getLocation().getZ() - srcBlock.getZ() + x.getZ()+1));
+				distances.put(Math.abs(srcBlock.getZ() + z.getZ() - player.getLocation().getZ()), new Vector(0, 0, -(srcBlock.getZ() + z.getZ() - player.getLocation().getZ()+1)));
+				double mindist = Double.MAX_VALUE;
+				for(double dist : distances.keySet()){
+					if(dist < mindist)
+						mindist = dist;
+				}
+				System.out.println("dist " + mindist);
+				System.out.println(distances);
+				if(mindist != Double.MAX_VALUE)
+					player.teleport(player.getLocation().add(distances.get(mindist)));
+			//}
 		}
 //		ArrayList<Block> blocklist = new ArrayList<Block>();
 //		if(player.getLocation().getX() - srcBlock.getX() + x.getX() <= 5 ){//highx side close

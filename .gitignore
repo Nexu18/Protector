@@ -30,3 +30,4 @@ manifest.mf
 *.ipr
 *.iws
 .idea/
+/bin/
