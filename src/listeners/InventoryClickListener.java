@@ -1,5 +1,7 @@
 package listeners;
 
+import java.util.ConcurrentModificationException;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -54,7 +56,7 @@ public class InventoryClickListener implements Listener{
 					if(menu.getInv().equals(event.getInventory())){
 						menu.runAction(event.getSlot(), player.getName());
 					}
-				}}catch(Exception e){e.printStackTrace();}
+				}}catch(ConcurrentModificationException e){}
 				
 //				if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Enlarge North")) {
 //					currentArea.enlarge(1, 'n');
@@ -129,7 +131,7 @@ public class InventoryClickListener implements Listener{
 					if(menu.getInv().equals(event.getInventory())){
 						menu.runAction(event.getSlot(), player.getName());
 					}
-				}}catch(Exception e){System.out.println("komischeexception");}
+				}}catch(ConcurrentModificationException e){}
 				
 //				if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Previous")) {
 //					//currentArea.showBlockMenu(player, page - 1);

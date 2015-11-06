@@ -1,6 +1,7 @@
 package clazz;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -51,6 +52,28 @@ public class ItemHandler {
 		}
 		System.out.println("Item description edit, item null");
 		return null;
+	}
+	
+	public static ItemStack createListItem(String name, Collection<String> lore, Material mat){
+		ItemStack item = new ItemStack(mat, 1);
+		ItemMeta im = item.getItemMeta();
+		im.setDisplayName(name);
+		List<String> lorelist = new ArrayList<String>();
+		int i = 0;
+		for(String str : lore){
+			if(i >= 10){
+				break;
+			}
+			lorelist.add(str);
+			i++;
+		}
+		if(lore.size() - i > 0){
+				lorelist.add(" ... " + (lore.size() - i) + " more.");
+		}
+		
+		im.setLore(lorelist);
+		item.setItemMeta(im);
+		return item;
 	}
 
 }

@@ -48,13 +48,17 @@ public class AreaMenu extends InventoryMenu{
 		}
 		
 		else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Edit Build List")) {
-			getArea().listMenu(player, 'b');
+			getArea().showListMenu("build", player);
+			super.close();
 		}else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Edit Access List")) {
-			getArea().listMenu(player, 'a');
+			getArea().showListMenu("access", player);
+			super.close();
 		}else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Edit Entry List")) {
-			getArea().listMenu(player, 'e');
+			getArea().showListMenu("entry", player);
+			super.close();
 		}else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Edit PvE List")) {
-			getArea().listMenu(player, 'p');
+			getArea().showListMenu("pve", player);
+			super.close();
 		}
 		
 		else if(itemStack.getItemMeta() != null && itemStack.getItemMeta().getDisplayName().contains("Edit Blocks")) {
@@ -153,10 +157,11 @@ public class AreaMenu extends InventoryMenu{
 		items.put(24, ItemHandler.createItem(Material.CHAINMAIL_HELMET, "§6Allow PvP", 1, "", "§5Toggle PvP in your area."));
 		items.put(8, ItemHandler.createItem(Material.MOB_SPAWNER, "§6Allow PvE", 1, "", "§5Allow or restrict PvE in your area."));
 		items.put(26, ItemHandler.createItem(Material.STONE, "§6Edit Blocks", 1, "§5Edit block-specific access rules."));
-		items.put(14, ItemHandler.createItem(Material.PAPER, "§6Edit Build List", 1, "§5Edit listed people for building."));
-		items.put(15, ItemHandler.createItem(Material.PAPER, "§6Edit Access List", 1, "§5Edit listed people for access."));
-		items.put(16, ItemHandler.createItem(Material.PAPER, "§6Edit Entry List", 1, "§5Edit listed people for entry."));
-		items.put(17, ItemHandler.createItem(Material.PAPER, "§6Edit PvE List", 1, "§5Edit listed people for PvE."));
+		
+		items.put(14, ItemHandler.createListItem("§6Edit Build List", area.build.set, Material.PAPER));
+		items.put(15, ItemHandler.createListItem("§6Edit Access List", area.access.set, Material.PAPER));
+		items.put(16, ItemHandler.createListItem("§6Edit Entry List", area.entry.set, Material.PAPER));
+		items.put(17, ItemHandler.createListItem("§6Edit PvE List", area.pve.set, Material.PAPER));
 		
 		items.put(0, area.getLocationItem());
 		for(int i  : items.keySet()){

@@ -6,10 +6,18 @@ import java.util.Set;
 public class Permission {
 	public Perm perm;
 	public Set<String> set;
+	String identifier;
 	
 	public Permission(Perm perm){
 		this.perm = perm;
 		set = new HashSet<String>();
+		this.identifier = "unknown identifier";
+	}
+	
+	public Permission(Perm perm, String identifier){
+		this.perm = perm;
+		set = new HashSet<String>();
+		this.identifier = identifier;
 	}
 	
 	public Permission(Perm perm, HashSet<String> set){
@@ -52,6 +60,10 @@ public class Permission {
 	
 	public String toString(){
 		return perm.toString();
+	}
+	
+	public String getIdentifier(){
+		return identifier;
 	}
 	
 	

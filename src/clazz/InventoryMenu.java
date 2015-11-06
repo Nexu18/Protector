@@ -96,5 +96,12 @@ public class InventoryMenu {
 	public Set<String> getPlayers() {
 		return players;
 	}
+	
+	public void close(){
+		for(String player : players){
+			Bukkit.getPlayer(player).closeInventory();
+			playersinmenu.remove(player);
+		}
+	}
 
 }

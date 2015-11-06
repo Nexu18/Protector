@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import clazz.Area;
+import clazz.ListMenu;
 import main.Protector;
 
 public class ProtectionPlayerListener implements Listener{
@@ -60,8 +61,9 @@ public class ProtectionPlayerListener implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerChat(AsyncPlayerChatEvent event){
 		boolean cancel = false;
-		for(Area area : Area.areas){
-			if(area.listMenuParser(event.getMessage(), event.getPlayer())){
+		for(ListMenu menu : ListMenu.listmenus){
+			if(menu.getPlayer().equals(event.getPlayer())){
+				menu.parse(event.getMessage());
 				cancel = true;
 			}
 		}

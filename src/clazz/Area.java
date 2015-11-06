@@ -32,27 +32,19 @@ public class Area {
 	 */
 	
 	private Block srcBlock;
-	//private Player owner;
 	private Set<String> owners;
 	private Set<InventoryMenu> menus;
+	private Set<ListMenu> listmenus;
+	
+	String identifier;
 	
 	boolean allowpvp;
-//	byte allowpve;
-//	Set<String> pve.set;
 	Permission pve;
-//	byte allowbuild;//0: only owner, 1: owner + listeded people 2: everyone but listed people 3: everyone
-//	Set<String> build.set;
 	Permission build;
-//	byte allowaccess;//0: only owner, 1: owner + listeded people 2: everyone but listed people 3: everyone
-//	Set<String> access.set;
 	Permission access;
-//	byte allowentry;
-//	Set<String> entry.set;
 	Permission entry;
-//	ArrayList<Block> blocks;
 	HashMap<Block, Permission> blockaccess;//0: only owner, 1: owner + listeded people 2: everyone but listed people 3: everyone
 	List<Block> blocksforaccess;
-	//	HashMap<Block, ArrayList<String>> blocklist;
 	
 	private Vector x;
 	private Vector z;
@@ -85,24 +77,53 @@ public class Area {
 		x = newx;
 		z = newz;
 		allowpvp = false;
-//		allowpve = 3;
-//		pve.set = new HashSet<String>();
-		pve = new Permission(Perm.OWNER_ONLY);
-//		allowbuild = 0;
-//		build.set = new HashSet<String>();
-		build = new Permission(Perm.OWNER_ONLY);
-//		allowaccess = 0;
-//		access.set = new HashSet<String>();
-		access = new Permission(Perm.OWNER_ONLY);
-//		allowentry = 3;
-//		entry.set = new HashSet<String>();
-		entry = new Permission(Perm.EVERYONE);
-//		blocks = new ArrayList<Block>();
-//		blockallow = new HashMap<Block, Byte>();
-//		blocklist = new HashMap<Block, ArrayList<String>>();
+		pve = new Permission(Perm.OWNER_ONLY, "PvE");
+		build = new Permission(Perm.OWNER_ONLY, "build");
+		access = new Permission(Perm.OWNER_ONLY, "access");
+		entry = new Permission(Perm.EVERYONE, "entry");
 		blockaccess = new HashMap<Block, Permission>();
 		blocksforaccess = new ArrayList<Block>();
 		playersInListMenu = new HashMap<String, Character>();
+		
+		identifier = "Area at (" + srcBlock.getX() + ", " + srcBlock.getY() + ", " + srcBlock.getZ() + ")";
+		
+	}
+	
+	public Area(Block block, Player owner, String identifier){
+		Vector newx = new Vector(2, 0, 2);
+		Vector newz = new Vector(-2, 0, -2);
+		int highx = newx.getBlockX() + block.getX();
+		int highz = newx.getBlockZ() + block.getZ();
+		int lowx = newz.getBlockX() + block.getX();
+		int lowz = newz.getBlockZ() + block.getZ();
+		for(Area area : areas){
+			if(highx >= area.getLowerX() && area.getHigherX() >= lowx && area.getHigherZ() >= lowz && highz >= area.getLowerZ()){
+				System.out.println("Could not create area, collision: " + area);
+				owner = null;
+				srcBlock = null;
+				return;
+			}
+		}
+		this.srcBlock = block;
+		//this.owner = owner;
+		this.owners = new HashSet<String>();
+		this.owners.add(owner.getName());
+		
+		owners.add("Blaxuni");
+		
+		menus = new HashSet<InventoryMenu>();
+		x = newx;
+		z = newz;
+		allowpvp = false;
+		pve = new Permission(Perm.OWNER_ONLY, "PvE");
+		build = new Permission(Perm.OWNER_ONLY, "build");
+		access = new Permission(Perm.OWNER_ONLY, "access");
+		entry = new Permission(Perm.EVERYONE, "entry");
+		blockaccess = new HashMap<Block, Permission>();
+		blocksforaccess = new ArrayList<Block>();
+		playersInListMenu = new HashMap<String, Character>();
+		
+		this.identifier = identifier;
 		
 	}
 	
@@ -137,67 +158,6 @@ public class Area {
 		return "not allowed";
 	}
 	
-//	public String permissionToString(byte b){
-//		switch(b){
-//		case 0:
-//			return "owner only";
-//		case 1:
-//			return "owner and listed people";
-//		case 2:
-//			return "everyone but listed people";
-//		case 3:
-//			return "everyone";
-//		}
-//		return "invalid permission byte";
-//	}
-	
-//	public void toggleBuild(Player player){
-//		build.toggle();
-//		Inventory inv = player.getOpenInventory().getTopInventory();
-//		inv.setItem(5, ItemHandler.editDescription(inv.getItem(5), "§f" + build, 0));
-//		player.updateInventory();
-//	}
-//	
-//	public void toggleAccess(Player player){
-//		access.toggle();
-//		Inventory inv = player.getOpenInventory().getTopInventory();
-//		inv.setItem(6, ItemHandler.editDescription(inv.getItem(6), "§f" + access, 0));
-//		player.updateInventory();
-//	}
-//	
-//	public void toggleEntry(Player player){
-//		entry.toggle();
-//		Inventory inv = player.getOpenInventory().getTopInventory();
-//		inv.setItem(7, ItemHandler.editDescription(inv.getItem(7), "§f" + entry, 0));
-//		player.updateInventory();
-//	}
-//	
-//	public void togglePvE(Player player){
-//		pve.toggle();
-//		Inventory inv = player.getOpenInventory().getTopInventory();
-//		inv.setItem(8, ItemHandler.editDescription(inv.getItem(8), "§f" + pve, 0));
-//		player.updateInventory();
-//	}
-//	
-//	public void togglePvP(Player player){
-//		if(allowpvp){
-//			allowpvp = false;
-//		}else{
-//			allowpvp = true;
-//		}
-//		Inventory inv = player.getOpenInventory().getTopInventory();
-//		inv.setItem(24, ItemHandler.editDescription(inv.getItem(24), "§f" + permissionBoolToString(allowpvp), 0));
-//		player.updateInventory();
-//	}
-//	
-//	public void toggleBlock(Block block){
-//		if(blockaccess.keySet().contains(block)){
-//			blockaccess.remove(block);
-//		}else{
-//			blockaccess.put(block, new Permission(Perm.OWNER_ONLY));
-//		}
-//	}
-	
 	/**
 	 * Will remove this block if it exists
 	 * @param block
@@ -207,7 +167,7 @@ public class Area {
 			blockaccess.remove(block);
 			blocksforaccess.remove(block);
 		}else{
-			blockaccess.put(block, new Permission(Perm.OWNER_ONLY));
+			blockaccess.put(block, new Permission(Perm.OWNER_ONLY, "block access (" + block.getX() + ", " + block.getY() + ", " + block.getZ() + ")"));
 			blocksforaccess.add(block);
 		}
 	}
@@ -283,156 +243,90 @@ public class Area {
 		
 	}
 	
-	public boolean listMenuParser(String s, Player player){
-		if(!playersInListMenu.keySet().contains(player.getName())){
-			return false;
-		}
-		char list = playersInListMenu.get(player.getName());
-		String[] cmd = s.split(" ");
-		if(cmd[0].equalsIgnoreCase("add")){
-			switch(list){
-			case 'b':
-				for(int i = 1; i < cmd.length; i++){
-					build.set.add(cmd[i]);
-					player.sendMessage("§5\"" + cmd[i] + "\" added to build list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
-				}
-				break;
-			case 'a':
-				for(int i = 1; i < cmd.length; i++){
-					access.set.add(cmd[i]);
-					player.sendMessage("§5\"" + cmd[i] + "\" added to access list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
-				}
-				break;
-			case 'e':
-				for(int i = 1; i < cmd.length; i++){
-					entry.set.add(cmd[i]);
-					player.sendMessage("§5\"" + cmd[i] + "\" added to entry list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
-				}
-				break;
-			case 'p':
-				for(int i = 1; i < cmd.length; i++){
-					pve.set.add(cmd[i]);
-					player.sendMessage("§5\"" + cmd[i] + "\" added to PvE list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
-				}
-				break;
-			}
-		}
-		else if(cmd[0].equalsIgnoreCase("remove")){
-			switch(list){
-			case 'b':
-				for(int i = 1; i < cmd.length; i++){
-					build.set.remove(cmd[i]);
-					player.sendMessage("§5\"" + cmd[i] + "\" removed from build list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
-				}
-				break;
-			case 'a':
-				for(int i = 1; i < cmd.length; i++){
-					access.set.remove(cmd[i]);
-					player.sendMessage("§5\"" + cmd[i] + "\" removed from access list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
-				}
-				break;
-			case 'e':
-				for(int i = 1; i < cmd.length; i++){
-					entry.set.remove(cmd[i]);
-					player.sendMessage("§5\"" + cmd[i] + "\" removed from entry list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
-				}
-				break;
-			case 'p':
-				for(int i = 1; i < cmd.length; i++){
-					pve.set.remove(cmd[i]);
-					player.sendMessage("§5\"" + cmd[i] + "\" removed from PvE list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
-				}
-				break;
-			}
-		}
-		else{
-			playersInListMenu.remove(player.getName());
-			switch(list){
-			case 'b':
-				player.sendMessage("§5Stopped editing the build list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
-				break;
-			case 'a':
-				player.sendMessage("§5Stopped editing the access list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
-				break;
-			case 'e':
-				player.sendMessage("§5Stopped editing the entry list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
-				break;
-			case 'p':
-				player.sendMessage("§5Stopped editing the PvE list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
-				break;
-			}
-		}
-		return true;
-	}
-	
-//	@SuppressWarnings("deprecation")
-//	public void showBlockMenu(Player player, int page){
-//		if(owners.contains(player.getName())){
-//			Inventory inv = Bukkit.createInventory(null, 9*5, "Protector - Blocks " + page);
-//			for(int i = 0; i < 18; i++){
-//				try{
-////					if((i/9)%2 == 0){
-////						inv.setItem(i, ItemHandler.createItem(blocks.get(54*(page-1)+i).getType(), "§6" + blocks.get(54*(page-1)+i).getX() + ", " + blocks.get(54*(page-1)+i).getY() 
-////								+ ", " + blocks.get(54*(page-1)+i).getZ(), 1, blocks.get(54*(page-1)+i).getData(),"§f" + permissionToString(blockallow.get(blocks.get(54*(page-1)+i)))));
-////						
-////						ItemStack item = ItemHandler.createItem(Material.PAPER, "§6List of " + blocks.get(54*(page-1)+i).getX() + ", " + blocks.get(54*(page-1)+i).getY() 
-////								+ ", " + blocks.get(54*(page-1)+i).getZ(), 1);
-////						for(int j = 0; j < blocklist.get(blocks.get(54*(page-1)+i)).size(); j++){
-////							ItemHandler.editDescription(item, "§f" + blocklist.get(blocks.get(54*(page-1)+i)), j);
-////						}
-////						inv.setItem(i+9, item);
-////					}
-//					inv.setItem(((i/9)*2*9)+(i%9), ItemHandler.createItem(blocks.get(18*(page-1) + i).getType(), "§6" + blocks.get(18*(page-1) + i).getX() + ", " + blocks.get(18*(page-1) + i).getY() 
-//							+ ", " + blocks.get(54*(page-1)+i).getZ(), 1, blocks.get(18*(page-1) + i).getData(), "§f" + permissionToString(blockallow.get(blocks.get(18*(page-1)+i)))));
-//					
-//					ItemStack item = ItemHandler.createItem(Material.PAPER, "§6List of " + blocks.get(18*(page-1) + i).getX() + ", " + blocks.get(18*(page-1) + i).getY() 
-//							+ ", " + blocks.get(18*(page-1) + i).getZ(), 1);
-//					for(int j = 0; j < blocklist.get(blocks.get(18*(page-1) + i)).size(); j++){
-//						ItemHandler.editDescription(item, "§f" + blocklist.get(blocks.get(18*(page-1) + i)), j);
-//					}
-//					inv.setItem(((i/9)*2*9)+(i%9)+9, item);
-//				}
-//				catch(IndexOutOfBoundsException e){
-//					
-//				}
-//			}
-//			if(page > 1){
-//				inv.setItem(inv.getSize() - 9, ItemHandler.createItem(Material.WOOL, "§6<- Previous", 1, 15));
-//			}
-//			if(blockaccess.keySet().size() > 18*page){
-//				inv.setItem(inv.getSize() - 1, ItemHandler.createItem(Material.WOOL, "§6Next ->", 1, 15));
-//			}
-//			inv.setItem(inv.getSize() - 2, ItemHandler.createItem(Material.BEDROCK, "§6Back", 1));
-//			inv.setItem(41, ItemHandler.createItem(Material.GOLD_BLOCK, "§6Location", 1, "§f" + srcBlock.getX() + ", " + srcBlock.getY() + ", " + srcBlock.getZ()));
-//			player.openInventory(inv);
+//	public boolean listMenuParser(String s, Player player){
+//		if(!playersInListMenu.keySet().contains(player.getName())){
+//			return false;
 //		}
+//		char list = playersInListMenu.get(player.getName());
+//		String[] cmd = s.split(" ");
+//		if(cmd[0].equalsIgnoreCase("add")){
+//			switch(list){
+//			case 'b':
+//				for(int i = 1; i < cmd.length; i++){
+//					build.set.add(cmd[i]);
+//					player.sendMessage("§5\"" + cmd[i] + "\" added to build list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
+//				}
+//				break;
+//			case 'a':
+//				for(int i = 1; i < cmd.length; i++){
+//					access.set.add(cmd[i]);
+//					player.sendMessage("§5\"" + cmd[i] + "\" added to access list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
+//				}
+//				break;
+//			case 'e':
+//				for(int i = 1; i < cmd.length; i++){
+//					entry.set.add(cmd[i]);
+//					player.sendMessage("§5\"" + cmd[i] + "\" added to entry list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
+//				}
+//				break;
+//			case 'p':
+//				for(int i = 1; i < cmd.length; i++){
+//					pve.set.add(cmd[i]);
+//					player.sendMessage("§5\"" + cmd[i] + "\" added to PvE list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
+//				}
+//				break;
+//			}
+//		}
+//		else if(cmd[0].equalsIgnoreCase("remove")){
+//			switch(list){
+//			case 'b':
+//				for(int i = 1; i < cmd.length; i++){
+//					build.set.remove(cmd[i]);
+//					player.sendMessage("§5\"" + cmd[i] + "\" removed from build list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
+//				}
+//				break;
+//			case 'a':
+//				for(int i = 1; i < cmd.length; i++){
+//					access.set.remove(cmd[i]);
+//					player.sendMessage("§5\"" + cmd[i] + "\" removed from access list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
+//				}
+//				break;
+//			case 'e':
+//				for(int i = 1; i < cmd.length; i++){
+//					entry.set.remove(cmd[i]);
+//					player.sendMessage("§5\"" + cmd[i] + "\" removed from entry list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
+//				}
+//				break;
+//			case 'p':
+//				for(int i = 1; i < cmd.length; i++){
+//					pve.set.remove(cmd[i]);
+//					player.sendMessage("§5\"" + cmd[i] + "\" removed from PvE list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ") successfully.");
+//				}
+//				break;
+//			}
+//		}
+//		else{
+//			playersInListMenu.remove(player.getName());
+//			switch(list){
+//			case 'b':
+//				player.sendMessage("§5Stopped editing the build list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
+//				break;
+//			case 'a':
+//				player.sendMessage("§5Stopped editing the access list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
+//				break;
+//			case 'e':
+//				player.sendMessage("§5Stopped editing the entry list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
+//				break;
+//			case 'p':
+//				player.sendMessage("§5Stopped editing the PvE list of area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
+//				break;
+//			}
+//		}
+//		return true;
 //	}
 	
 	public void showMenu(Player player){
 		if(owners.contains(player.getName())){
-//			Inventory inv = Bukkit.createInventory(null, 27, "Protector - Area");
-//			inv.setItem(0, ItemHandler.createItem(Material.GOLD_BLOCK, "§6Location", 1, "§f" + srcBlock.getX() + ", " + srcBlock.getY() + ", " + srcBlock.getZ()));
-//			for(ItemStack item : Protector.areaMenuItems.keySet()){
-//				System.out.println("Item: " + item);
-//				if(item.getItemMeta().getDisplayName().contains("Allow Building")){
-//					inv.setItem(Protector.areaMenuItems.get(item), ItemHandler.editDescription(item, "§f" + build, 0));
-//				}else if(item.getItemMeta().getDisplayName().contains("Allow Access")){
-//					inv.setItem(Protector.areaMenuItems.get(item), ItemHandler.editDescription(item, "§f" + access, 0));
-//				}else if(item.getItemMeta().getDisplayName().contains("Allow Entry")){
-//					inv.setItem(Protector.areaMenuItems.get(item), ItemHandler.editDescription(item, "§f" + entry, 0));
-//				}else if(item.getItemMeta().getDisplayName().contains("Allow PvE")){
-//					inv.setItem(Protector.areaMenuItems.get(item), ItemHandler.editDescription(item, "§f" + pve, 0));
-//				}else if(item.getItemMeta().getDisplayName().contains("Allow PvP")){
-//					inv.setItem(Protector.areaMenuItems.get(item), ItemHandler.editDescription(item, "§f" + permissionBoolToString(allowpvp), 0));
-//				}
-//				else{
-//					inv.setItem(Protector.areaMenuItems.get(item), item);
-//				}
-//				
-//			}
-//			
-//			player.setCompassTarget(new Location(player.getWorld(),1000000, 64,0));
-//			player.openInventory(inv);
 			InventoryMenu menu = new AreaMenu(this);
 			menu.open(player);
 			menus.add(menu);
@@ -444,9 +338,30 @@ public class Area {
 	}
 	
 	public void showBlockAccessMenu(Player player){
+		if(blockaccess.keySet() == null || blockaccess.keySet().isEmpty() || blocksforaccess == null || blocksforaccess.isEmpty()){
+			return;
+		}
 		InventoryMenu menu = new BlockAccessMenu(this);
 		menu.open(player);
 		menus.add(menu);
+	}
+	
+	public void showListMenu(String permission, Player player){
+		if("pve".equalsIgnoreCase(permission)){
+			new ListMenu(player, pve, identifier);
+		}else if("build".equalsIgnoreCase(permission)){
+			new ListMenu(player, build, identifier);
+		}else if("entry".equalsIgnoreCase(permission)){
+			new ListMenu(player, entry, identifier);
+		}
+	}
+	
+	public void showListMenu(Block block, Player player){
+		for(Block b : blockaccess.keySet()){
+			if(b.equals(block)){
+				new ListMenu(player, blockaccess.get(b), identifier);
+			}
+		}
 	}
 	
 	public int getLowerX(){
@@ -649,47 +564,6 @@ public class Area {
 		return null;
 	}
 	
-//	public boolean permissionBuild(String player){
-//		return build.hasPermission(player, owners);
-//	}
-//	
-//	public boolean permissionEntry(String player){
-//		return entry.hasPermission(player, owners);
-////		switch(allowentry){//0: only owner, 1: owner + listeded people 2: everyone but listed people 3: everyone
-////		case 0:
-////			if(player.equals(owner.getName())){
-////				return true;
-////			}
-////			break;
-////		case 1:
-////			if(player.equals(owner.getName()) || entry.set.contains(player)){
-////				return true;
-////			}
-////			break;
-////		case 2:
-////			if(player.equals(owner.getName()) || !entry.set.contains(player)){
-////				return true;
-////			}
-////			break;
-////		case 3:
-////			return true;
-////		}
-////		return false;
-//	}
-//	
-//	public boolean permissionPvE(String player){
-//		return pve.hasPermission(player, owners);
-//	}
-//	
-//	public boolean permissionPvP(){
-//		return allowpvp;
-//	}
-	
-//	public Set<Block> lockOutblocklist(Player player){
-//		Set<Block> blocklist = new HashSet<Block>();
-//		for()
-//	}
-	
 	public void lockOut(Player player){
 		if(isInside(player.getLocation())){
 			if(srcBlock.getX() + x.getX() <= player.getLocation().getX() && player.getLocation().getX() <= srcBlock.getX() + x.getX() - 1){
@@ -718,49 +592,7 @@ public class Area {
 		
 	}
 	
-//	public boolean permissionAccess(String player, Block block){
-//		if(blockallow.keySet().contains(block)){
-//			switch(blockallow.get(block)){
-//			case 0:
-//				if(player.equals(owner.getName())){
-//					return true;
-//				}
-//				return false;
-//			case 1:
-//				if(player.equals(owner.getName()) || blocklist.get(block).contains(player)){
-//					return true;
-//				}
-//				return false;
-//			case 2:
-//				if(player.equals(owner.getName()) || !blocklist.get(block).contains(player)){
-//					return true;
-//				}
-//				return false;
-//			case 3:
-//				return true;
-//			}
-//		}
-//		switch(allowaccess){//0: only owner, 1: owner + listeded people 2: everyone but listed people 3: everyone
-//		case 0:
-//			if(player.equals(owner.getName())){
-//				return true;
-//			}
-//			break;
-//		case 1:
-//			if(player.equals(owner.getName()) || access.set.contains(player)){
-//				return true;
-//			}
-//			break;
-//		case 2:
-//			if(player.equals(owner.getName()) || !access.set.contains(player)){
-//				return true;
-//			}
-//			break;
-//		case 3:
-//			return true;
-//		}
-//		return false;
-//	}
+
 	
 	public ItemStack getLocationItem(){
 		return ItemHandler.createItem(Material.GOLD_BLOCK, "§6Location", 1, "§f" + getBlock().getX() + ", " + getBlock().getY() + ", " 

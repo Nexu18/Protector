@@ -41,18 +41,24 @@ public class BlockAccessMenu extends InventoryMenu{
 			
 		}
 		
-		
 		else if(itemStack.getItemMeta() != null){
 			String[] args = itemStack.getItemMeta().getDisplayName().split("§\\d");
-			System.out.println("args: ");
-			for(String str : args){
-				System.out.println(str);
-			}
-			System.out.println("end of args");
+//			System.out.println("args: ");
+//			for(String str : args){
+//				System.out.println(str);
+//			}
+//			System.out.println("end of args");
 			
-			
-			if(args.length == 9 && args[1].contains("List of")){
-				
+			if(/*args.length == 9 && */args[1].contains("List of")){
+				System.out.println("blocklist");
+				try{
+					Block block = player.getWorld().getBlockAt(new Location(player.getWorld(), Integer.parseInt(args[4]), Integer.parseInt(args[6]), Integer.parseInt(args[8])));
+					System.out.println("block: " + block.getX() + ", " + block.getY() + ", " + block.getZ());
+					area.showListMenu(block, player);
+					super.close();
+				}catch(NumberFormatException e){
+					System.out.println("Invalid Item name " + itemStack.getItemMeta().getDisplayName() + " selected in an BlockAccessMenu!");
+				}
 			}else if(/*args.length == 8 && */args[2].contains(" at (")){
 				System.out.println("block");
 				try{
@@ -86,8 +92,8 @@ public class BlockAccessMenu extends InventoryMenu{
 					//ItemHandler.createItem(Material.PAPER, "§6Edit PvE List", 1, "§5Edit listed people for PvE.")
 					items.put(i+((i/9)*9), ItemHandler.createItem(block.getType(), "§3" + block.getType() + "§8 at (§3" + block.getX() 
 						+ "§8, §3" + block.getY() + "§8, §3" + block.getZ() + "§8)", 1, block.getData(), "§f" + area.getPermissionForBlock(block)));
-					items.put(i+9+((i/9)*9), ItemHandler.createItem(Material.PAPER, "§8List of §3" + block.getType() + "§8 at (§3" + block.getX() 
-						+ "§8, §3" + block.getY() + "§8, §3" + block.getZ() + "§8)", 1));
+					items.put(i+9+((i/9)*9), ItemHandler.createListItem("§8List of §3" + block.getType() + "§8 at (§3" + block.getX() 
+						+ "§8, §3" + block.getY() + "§8, §3" + block.getZ() + "§8)", area.blockaccess.get(block).set, Material.PAPER));
 				//}
 			}else{
 				items.put(i+((i/9)*9), new ItemStack(Material.AIR));
