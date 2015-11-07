@@ -14,6 +14,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import clazz.Area;
 import clazz.ListMenu;
@@ -68,6 +69,15 @@ public class ProtectionPlayerListener implements Listener{
 			}
 		}
 		event.setCancelled(cancel);
+	}
+	
+	@EventHandler
+	public void onPlayerShearEntity(PlayerShearEntityEvent event){
+		for(Area area : Area.areas){
+			if(area.isInside(event.getEntity().getLocation()) && !area.permission(event.getPlayer().getName(), "pve")){
+				event.setCancelled(true);
+			}
+		}
 	}
 
 }

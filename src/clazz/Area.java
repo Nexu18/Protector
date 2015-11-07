@@ -637,6 +637,9 @@ public class Area {
 	}
 	
 	public boolean permission(String player, Block block){
+		if(Protector.isFence(block.getType())){
+			return pve.hasPermission(player, owners);
+		}
 		for(Block block2 : blockaccess.keySet()){
 			if(block2.equals(block)){
 				return blockaccess.get(block2).hasPermission(player, owners);

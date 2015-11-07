@@ -31,12 +31,24 @@ public class Protector extends JavaPlugin{
 			Material.CAKE, Material.CAKE_BLOCK, Material.CAULDRON, Material.JUNGLE_FENCE_GATE, Material.DARK_OAK_FENCE_GATE, Material.SPRUCE_FENCE_GATE, Material.BEACON, 
 			Material.DROPPER, Material.ANVIL, Material.ENCHANTMENT_TABLE, Material.JUKEBOX, Material.NOTE_BLOCK, Material.DARK_OAK_DOOR, Material.IRON_DOOR_BLOCK, 
 			Material.SPRUCE_DOOR, Material.JUNGLE_DOOR, Material.WOODEN_DOOR, Material.TRAP_DOOR, Material.IRON_TRAPDOOR, Material.TRAPPED_CHEST, Material.DISPENSER, 
-			Material.HOPPER, Material.FENCE_GATE, Material.FENCE, Material.ACACIA_FENCE, Material.BIRCH_FENCE, Material.DARK_OAK_FENCE,
-			Material.IRON_FENCE, Material.JUNGLE_FENCE, Material.NETHER_FENCE, Material.SPRUCE_FENCE, Material.LEASH};
+			Material.HOPPER, Material.FENCE_GATE, 
+			Material.IRON_FENCE, Material.LEASH};
+	
+	public static final Material[] FENCES = {Material.JUNGLE_FENCE, Material.NETHER_FENCE, Material.SPRUCE_FENCE, Material.FENCE, Material.ACACIA_FENCE, 
+			Material.BIRCH_FENCE, Material.DARK_OAK_FENCE};
 	
 	public static boolean accessible(Material material){
 		for(int i = 0; i < ACCESS.length; i++){
 			if(ACCESS[i] == material){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isFence(Material material){
+		for(int i = 0; i < FENCES.length; i++){
+			if(FENCES[i].equals(material)){
 				return true;
 			}
 		}
