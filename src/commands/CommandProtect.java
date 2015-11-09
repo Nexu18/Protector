@@ -25,10 +25,10 @@ public class CommandProtect implements CommandExecutor {
 					Area area = new Area(block,player);
 					if(area.getBlock() != null){
 						Area.areas.add(area);
-						player.sendMessage("Protection created successfully at (" + block.getX() + "," + block.getZ() + ").");
+						player.sendMessage(Protector.PREFIX + "§8Protection created successfully at (§3" + block.getX() + "§8, §3" + block.getZ() + "§8).");
 						return true;
 					}
-					player.sendMessage("Could not create Protection.");
+					player.sendMessage(Protector.PREFIX + "§8Could not create Protection.");
 					
 				}
 				
@@ -38,6 +38,16 @@ public class CommandProtect implements CommandExecutor {
 					for(Area area : Area.areas){
 						if(area.isInside(block.getLocation()) && area.isOwner(player.getName())){
 							area.addAccessBlock(block);
+						}
+					}
+				}
+			}else if(args.length == 2 && args[0].equalsIgnoreCase("addowner")){
+				Block block = player.getTargetBlock((Set<Material>)null, 20);
+				if(block != null && !block.getType().equals(Material.AIR)){
+					for(Area area : Area.areas){
+						if(area.getBlock().equals(block) && area.isOwner(player.getName())){
+							area.getOwners().add(args[1]);
+							player.sendMessage(Protector.PREFIX + "§8Added \"§3" + args[0] + "§8\" to the owners of §3" + area.getIdentifier() + "§8.");
 						}
 					}
 				}
@@ -75,10 +85,10 @@ public class CommandProtect implements CommandExecutor {
 					Area area = new Area(block,player, args[0]);
 					if(area.getBlock() != null){
 						Area.areas.add(area);
-						player.sendMessage("Protection created successfully at (" + block.getX() + "," + block.getZ() + ").");
+						player.sendMessage(Protector.PREFIX + "§8Protection created successfully at (§3" + block.getX() + "§8, §3" + block.getZ() + "§8).");
 						return true;
 					}
-					player.sendMessage("Could not create Protection.");
+					player.sendMessage(Protector.PREFIX + "§8Could not create Protection.");
 					
 				}
 			}

@@ -53,7 +53,7 @@ public class ProtectionPlayerListener implements Listener{
 				if(!area.permission(event.getPlayer().getName(), "entry")){
 					event.setCancelled(false);
 					area.lockOut(event.getPlayer());
-					event.getPlayer().sendMessage("You are not allowed to enter this area. If you are stuck, try /warp spawn");
+					event.getPlayer().sendMessage(Protector.PREFIX + "§8You are not allowed to enter this area.");
 				}
 			}
 		}

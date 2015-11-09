@@ -21,6 +21,7 @@ import clazz.ItemHandler;
 
 public class Protector extends JavaPlugin{
 	
+	public static final String PREFIX = "§7[§3Protector§7] §8";
 	public static HashMap<ItemStack, Integer> areaMenuItems;
 	public Logger log;
 	private static Protector instance;

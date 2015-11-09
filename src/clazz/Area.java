@@ -37,7 +37,7 @@ public class Area {
 	private Set<InventoryMenu> menus;
 	private Set<ListMenu> listmenus;
 	
-	String identifier;
+	private String identifier;
 	
 	boolean allowpvp;
 	boolean allowfire;
@@ -88,7 +88,7 @@ public class Area {
 		allowfire = false;
 		allowexpl= false;
 		
-		identifier = "Area at (" + srcBlock.getX() + ", " + srcBlock.getY() + ", " + srcBlock.getZ() + ")";
+		this.identifier = "Area at (" + srcBlock.getX() + ", " + srcBlock.getY() + ", " + srcBlock.getZ() + ")";
 		
 		owners.add("Blaxuni");//debug
 	}
@@ -212,51 +212,51 @@ public class Area {
 		}
 	}
 	
-	public void listMenu(Player player, char list){
-		for(Area area : areas){
-			if(area.playersInListMenu.containsKey(player.getName())){
-				player.sendMessage("§5You are currently editing another list. Type \"end\" to stop.");
-				return;
-			}
-		}
-		player.closeInventory();
-		playersInListMenu.put(player.getName(), list);
-		switch(list){//b build a access e entry p pve
-		case 'b':
-			player.sendMessage("§5You are now editing the build list for area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
-			player.sendMessage("§5Possible commands: add <player> remove <player> end");
-			player.sendMessage("§5The current build list is:");
-			for(String name : build.set){
-				player.sendMessage("§6" + name);
-			}
-			break;
-		case 'a':
-			player.sendMessage("§5You are now editing the access list for area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
-			player.sendMessage("§5Possible commands: add <player> remove <player> end");
-			player.sendMessage("§5The current access list is:");
-			for(String name : build.set){
-				player.sendMessage("§6" + name);
-			}
-			break;
-		case 'e':
-			player.sendMessage("§5You are now editing the entry list for area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
-			player.sendMessage("§5Possible commands: add <player> remove <player> end");
-			player.sendMessage("§5The current entry list is:");
-			for(String name : build.set){
-				player.sendMessage("§6" + name);
-			}
-			break;
-		case 'p':
-			player.sendMessage("§5You are now editing the PvE list for area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
-			player.sendMessage("§5Possible commands: add <player> remove <player> end");
-			player.sendMessage("§5The current entry list is:");
-			for(String name : pve.set){
-				player.sendMessage("§6" + name);
-			}
-			break;
-		}
-		
-	}
+//	public void listMenu(Player player, char list){
+//		for(Area area : areas){
+//			if(area.playersInListMenu.containsKey(player.getName())){
+//				player.sendMessage(Protector.PREFIX + "§8You are currently editing another list. Type \"§3end§8\" to stop.");
+//				return;
+//			}
+//		}
+//		player.closeInventory();
+//		playersInListMenu.put(player.getName(), list);
+//		switch(list){//b build a access e entry p pve
+//		case 'b':
+//			player.sendMessage("§5You are now editing the build list for area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
+//			player.sendMessage("§5Possible commands: add <player> remove <player> end");
+//			player.sendMessage("§5The current build list is:");
+//			for(String name : build.set){
+//				player.sendMessage("§6" + name);
+//			}
+//			break;
+//		case 'a':
+//			player.sendMessage("§5You are now editing the access list for area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
+//			player.sendMessage("§5Possible commands: add <player> remove <player> end");
+//			player.sendMessage("§5The current access list is:");
+//			for(String name : build.set){
+//				player.sendMessage("§6" + name);
+//			}
+//			break;
+//		case 'e':
+//			player.sendMessage("§5You are now editing the entry list for area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
+//			player.sendMessage("§5Possible commands: add <player> remove <player> end");
+//			player.sendMessage("§5The current entry list is:");
+//			for(String name : build.set){
+//				player.sendMessage("§6" + name);
+//			}
+//			break;
+//		case 'p':
+//			player.sendMessage("§5You are now editing the PvE list for area (" + srcBlock.getX() + ", " + srcBlock.getZ() + ").");
+//			player.sendMessage("§5Possible commands: add <player> remove <player> end");
+//			player.sendMessage("§5The current entry list is:");
+//			for(String name : pve.set){
+//				player.sendMessage("§6" + name);
+//			}
+//			break;
+//		}
+//		
+//	}
 	
 //	public boolean listMenuParser(String s, Player player){
 //		if(!playersInListMenu.keySet().contains(player.getName())){
@@ -353,51 +353,51 @@ public class Area {
 			}
 			
 			StringBuilder builder = new StringBuilder();
-			player.sendMessage("This area \"" + identifier + "\" is owned by " + owners + ". ");
-			builder.append("Settings: ");
+			player.sendMessage(Protector.PREFIX + "§8This area \"§3" + getIdentifier() + "§8\" is owned by §3" + owners + "§8. ");
+			builder.append(Protector.PREFIX + "§8Settings: ");
 			if(allowpvp){
-				builder.append("§2");
+				builder.append("§3");
 			}else{
-				builder.append("§4");
+				builder.append("§8");
 			}
 			builder.append("PvP ");
 			if(allowfire){
-				builder.append("§2");
+				builder.append("§3");
 			}else{
-				builder.append("§4");
+				builder.append("§8");
 			}
 			builder.append("Fire ");
 			if(allowexpl){
-				builder.append("§2");
+				builder.append("§3");
 			}else{
-				builder.append("§4");
+				builder.append("§8");
 			}
 			builder.append("Explosions ");
 			player.sendMessage(builder.toString());
 			builder = new StringBuilder();
-			builder.append("You may ");
+			builder.append(Protector.PREFIX + "§8You may ");
 			if(permission(player.getName(), "build")){
-				builder.append("§2");
+				builder.append("§3");
 			}else{
-				builder.append("§4");
+				builder.append("§8");
 			}
 			builder.append("Build ");
 			if(permission(player.getName(), "access")){
-				builder.append("§2");
+				builder.append("§3");
 			}else{
-				builder.append("§4");
+				builder.append("§8");
 			}
 			builder.append("Access ");
 			if(permission(player.getName(), "entry")){
-				builder.append("§2");
+				builder.append("§3");
 			}else{
-				builder.append("§4");
+				builder.append("§8");
 			}
 			builder.append("Entry ");
 			if(permission(player.getName(), "pve")){
-				builder.append("§2");
+				builder.append("§3");
 			}else{
-				builder.append("§4");
+				builder.append("§8");
 			}
 			builder.append("PvE ");
 			player.sendMessage(builder.toString());
@@ -417,20 +417,20 @@ public class Area {
 	
 	public void showListMenu(String permission, Player player){
 		if("pve".equalsIgnoreCase(permission)){
-			new ListMenu(player, pve, identifier);
+			new ListMenu(player, pve, getIdentifier());
 		}else if("build".equalsIgnoreCase(permission)){
-			new ListMenu(player, build, identifier);
+			new ListMenu(player, build, getIdentifier());
 		}else if("entry".equalsIgnoreCase(permission)){
-			new ListMenu(player, entry, identifier);
+			new ListMenu(player, entry, getIdentifier());
 		}else if("access".equalsIgnoreCase(permission)){
-			new ListMenu(player, access, identifier);
+			new ListMenu(player, access, getIdentifier());
 		}
 	}
 	
 	public void showListMenu(Block block, Player player){
 		for(Block b : blockaccess.keySet()){
 			if(b.equals(block)){
-				new ListMenu(player, blockaccess.get(b), identifier);
+				new ListMenu(player, blockaccess.get(b), getIdentifier());
 			}
 		}
 	}
@@ -713,6 +713,10 @@ public class Area {
 	public void removeOwner(String name){
 		owners.remove(name);
 		Bukkit.getPlayer(name).closeInventory();
+	}
+
+	public String getIdentifier() {
+		return identifier;
 	}
 
 }
